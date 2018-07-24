@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 // main class and a controller for connecting all the parts.
 public class Controller {
@@ -73,23 +74,38 @@ public class Controller {
                         //if not, add it.
                         dbInterface.addPitStop(pitStop);
 
-                        // System.out.println("New Pit Stop added: ("+pitStop.vehicleNumber+","+pitStop.inTime+")");
+                        // System.out.println("New Pit Stop added: ("+pitStop.vehicleNumber+","+pitStop.timeIn+")");
                     }
                 }
             }
 
     }
 
+    // get the pit stops in the database, in a json format that can be changed into a REST API.
+    public JSONArray getPitStops()
+    {
+        ArrayList<PitStop> pitStops = dbInterface.getPitStops();
+        JSONArray pitStopsJSONArray = new JSONArray();
+        for (PitStop pitStop :pitStops){
+            JSONObject pitStopJSON = new JSONObject();
+            pitStopJSON.put("vehicle_number", pitStop.vehicleNumber);
+            pitStopJSON.put("time_in", pitStop.timeIn);
+            pitStopJSON.put("time_out", pitStop.timeOut);
+            pitStopJSON.put("comment", pitStop.comment);
 
-    public JSONArray getPitStops(){
-        return null;
+            pitStopsJSONArray.put(pitStopJSON);
+        }
+        return pitStopsJSONArray;
     }
 
     // main thread and method, for launching the controller and the various sub threads.
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
         Controller controller = new Controller(args[0], args[1]);
         FeedReaderThread feedReaderThread = new FeedReaderThread(controller, 500);
         feedReaderThread.start();
+        Thread.sleep(5000);
+
+        controller.getPitStops();
 
     }
 

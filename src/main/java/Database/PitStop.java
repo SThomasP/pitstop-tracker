@@ -5,14 +5,15 @@ package Database;
 public class PitStop {
 
     public final int vehicleNumber;
-    public final double inTime;
-    public final double outTime;
+    public final double timeIn;
+    public final double timeOut;
     public String comment;
 
     public PitStop(int vehicleNumber, double inTime, double outTime){
         this.vehicleNumber = vehicleNumber;
-        this.inTime = inTime;
-        this.outTime = outTime;
+        this.timeIn = inTime;
+        this.timeOut = outTime;
+        this.comment = "";
     }
 
 }

@@ -46,12 +46,13 @@ public class DBInterface {
         Connection connection = this.connect();
         if (connection != null) {
                 // prepare the sql statement
-                String insertSQL = "insert into pitstops (vehicleNumber, timeIn, timeOut) values (?,?,?);";
+                String insertSQL = "insert into pitstops (vehicleNumber, timeIn, timeOut, comment) values (?,?,?,?);";
                 try {
                     PreparedStatement statement = connection.prepareStatement(insertSQL);
                     statement.setInt(1, pitStop.vehicleNumber);
-                    statement.setDouble(2, pitStop.inTime);
-                    statement.setDouble(3, pitStop.outTime);
+                    statement.setDouble(2, pitStop.timeIn);
+                    statement.setDouble(3, pitStop.timeOut);
+                    statement.setString(4, pitStop.comment);
                     statement.executeUpdate();
 
                     connection.close();
@@ -73,7 +74,7 @@ public class DBInterface {
                 PreparedStatement statement = connection.prepareStatement(updateSQL);
                 statement.setString(1, comment);
                 statement.setInt(2, pitStop.vehicleNumber);
-                statement.setDouble(3, pitStop.inTime);
+                statement.setDouble(3, pitStop.timeIn);
                 statement.executeUpdate();
 
                 connection.close();
@@ -95,8 +96,8 @@ public class DBInterface {
                 PreparedStatement statement = connection.prepareStatement(checkSQL);
 
                 statement.setInt(1, pitStop.vehicleNumber);
-                statement.setDouble(2, pitStop.inTime);
-                statement.setDouble(3, pitStop.outTime);
+                statement.setDouble(2, pitStop.timeIn);
+                statement.setDouble(3, pitStop.timeOut);
 
                 ResultSet results = statement.executeQuery();
                 boolean inDatabase = results.getInt(1) == 1;
@@ -110,9 +111,25 @@ public class DBInterface {
         return false;
     }
 
-    //get all pit stops from the database.
+    //get all pit stops from the database, saving them to the ArrayList
     public ArrayList<PitStop> getPitStops(){
-        return null;
+        ArrayList<PitStop> pitStops = new ArrayList<PitStop>();
+        Connection connection = this.connect();
+        String getAllSQL = "SELECT * FROM pitstops";
+        if (connection != null){
+            try{
+                Statement statement = connection.createStatement();
+                ResultSet results = statement.executeQuery(getAllSQL);
+                while (results.next()){
+                    PitStop pitStop = new PitStop(results.getInt("vehicleNumber"), results.getDouble("timeIn"), results.getDouble("timeOut"));
+                    pitStop.comment = results.getString("comment");
+                    pitStops.add(pitStop);
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+        return pitStops;
     }
 
 
