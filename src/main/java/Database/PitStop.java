@@ -1,5 +1,7 @@
 package Database;
 
+
+// data wrapper for storing information about a pit stop
 public class PitStop {
 
     public final int vehicleNumber;

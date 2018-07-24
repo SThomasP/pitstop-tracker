@@ -7,6 +7,7 @@ public class DBInterface {
 
     private String dbPath;
 
+    // create a connection to the database.
     private Connection connect(){
         Connection databaseConnection = null;
         try {
@@ -19,6 +20,7 @@ public class DBInterface {
         return databaseConnection;
     }
 
+    // add the prefixes to the filepath, and then connect to the database and reset the tables.
     public DBInterface(String filePath){
         dbPath = "jdbc:sqlite:" + filePath;
 
@@ -26,7 +28,9 @@ public class DBInterface {
         if (connection != null) {
             try {
                 Statement statement = connection.createStatement();
+                // drop the old table
                 statement.execute("drop table if exists pitstops;");
+                // and then create a new one
                 statement.execute("create table pitstops (vehicleNumber integer, timeIn real, timeOut real not null,comment text, PRIMARY KEY (vehicleNumber, timeIn));");
                 connection.close();
             }
@@ -39,7 +43,6 @@ public class DBInterface {
 
     // add a pit stop to the database, getting it's ID and adding that to the class.
     public void addPitStop(PitStop pitStop) {
-        // check the id
         Connection connection = this.connect();
         if (connection != null) {
                 // prepare the sql statement
@@ -60,6 +63,7 @@ public class DBInterface {
 
     }
 
+    // update the comment on a pit stop.
     public void updateComment(PitStop pitStop){
         String comment = pitStop.comment;
         Connection connection = this.connect();
@@ -82,6 +86,7 @@ public class DBInterface {
 
     }
 
+    // check to see the pit stop is in the base, returning true if it is.
     public boolean checkPitStopInDatabase(PitStop pitStop){
         Connection connection = this.connect();
         String checkSQL = "SELECT COUNT(*) FROM pitstops where vehicleNumber = ? and timeIn = ? and timeOut = ?";
