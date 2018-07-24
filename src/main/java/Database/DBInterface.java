@@ -27,7 +27,7 @@ public class DBInterface {
             try {
                 Statement statement = connection.createStatement();
                 statement.execute("drop table if exists pitstops;");
-                statement.execute("create table pitstops (vehichleNumber integer, timeIn real, timeOut real not null,comment text, PRIMARY KEY (vehichleNumber, timeIn));");
+                statement.execute("create table pitstops (vehicleNumber integer, timeIn real, timeOut real not null,comment text, PRIMARY KEY (vehicleNumber, timeIn));");
                 connection.close();
             }
             catch (SQLException e){
@@ -43,7 +43,7 @@ public class DBInterface {
         Connection connection = this.connect();
         if (connection != null) {
                 // prepare the sql statement
-                String insertSQL = "insert into pitstops (vehichleNumber, timeIn, timeOut) values (?,?,?);";
+                String insertSQL = "insert into pitstops (vehicleNumber, timeIn, timeOut) values (?,?,?);";
                 try {
                     PreparedStatement statement = connection.prepareStatement(insertSQL);
                     statement.setInt(1, pitStop.vehicleNumber);
@@ -64,7 +64,7 @@ public class DBInterface {
         String comment = pitStop.comment;
         Connection connection = this.connect();
         if (connection != null){
-            String updateSQL = "update pitstops set comment = ? where vehichleNumber = ? and timeIn = ?;";
+            String updateSQL = "update pitstops set comment = ? where vehicleNumber = ? and timeIn = ?;";
             try {
                 PreparedStatement statement = connection.prepareStatement(updateSQL);
                 statement.setString(1, comment);
@@ -82,6 +82,29 @@ public class DBInterface {
 
     }
 
+    public boolean checkPitStopInDatabase(PitStop pitStop){
+        Connection connection = this.connect();
+        String checkSQL = "SELECT COUNT(*) FROM pitstops where vehicleNumber = ? and timeIn = ? and timeOut = ?";
+        if (connection != null){
+            try {
+                PreparedStatement statement = connection.prepareStatement(checkSQL);
+
+                statement.setInt(1, pitStop.vehicleNumber);
+                statement.setDouble(2, pitStop.inTime);
+                statement.setDouble(3, pitStop.outTime);
+
+                ResultSet results = statement.executeQuery();
+                boolean inDatabase = results.getInt(1) == 1;
+                connection.close();
+                return inDatabase;
+
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
     //get all pit stops from the database.
     public ArrayList<PitStop> getPitStops(){
         return null;
@@ -94,11 +117,14 @@ public class DBInterface {
         PitStop ps1 = new PitStop(33, 134.33, 0);
         dbInterface.addPitStop(ps1);
 
+        System.out.println(dbInterface.checkPitStopInDatabase(ps1));
+
         PitStop ps2 = new PitStop(27, 145.23, 0);
         dbInterface.addPitStop(ps2);
 
         ps2.comment = "Cheating... ";
         dbInterface.updateComment(ps2);
         }
+
 
 }

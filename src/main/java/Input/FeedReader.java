@@ -1,7 +1,8 @@
 package Input;
 
-
+import Database.DBInterface;
 import Database.PitStop;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -15,9 +16,10 @@ public class FeedReader {
 
     public FeedReader(String webAddress) throws IOException{
         this.webAddress = new URL(webAddress);
+        jsonObject = new JSONObject("{}");
     }
 
-    public synchronized void update(){
+    public synchronized JSONObject getJsonObject(){
         try {
             jsonObject = new JSONObject( new JSONTokener(webAddress.openStream()));
 
@@ -26,20 +28,10 @@ public class FeedReader {
         catch (IOException e){
             e.printStackTrace();
         }
-    }
-
-    public JSONObject getJson(){
         return jsonObject;
     }
 
     public static void main(String[] args){
-        try {
-            FeedReader fr = new FeedReader("http://localhost:9000/api/livefeed");
-            fr.update();
-            System.out.println("Hello World");
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
+
     }
 }
