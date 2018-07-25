@@ -19,7 +19,7 @@ public class WebApp {
         server = HttpServer.create(new InetSocketAddress(8080), 0);
         server.createContext("/api", new ApiHandler(dataHandler));
         server.createContext("/", new StaticFileHandler("src/main/resources/index.html", "text/html"));
-        server.createContext("/ajax_script.js", new StaticFileHandler("src/main/resources/script.js", ""));
+        server.createContext("/ajax_script.js", new StaticFileHandler("src/main/resources/script.js", "application/javascript"));
         server.setExecutor(null);
         server.start();
     }
