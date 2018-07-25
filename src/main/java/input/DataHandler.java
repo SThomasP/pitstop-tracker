@@ -1,7 +1,7 @@
-package Input;
+package input;
 
-import Database.DBInterface;
-import Database.PitStop;
+import database.DBInterface;
+import database.PitStop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,17 +9,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 // main class and a controller for connecting all the parts.
-public class Controller {
+public class DataHandler {
 
     private DBInterface dbInterface;
     private FeedReader reader;
+    private Thread acquisitionThread;
+
+    public void startAcquisitionThread() {
+        acquisitionThread = new DataAcquisitonThread(this, 1000);
+        acquisitionThread.start();
+    }
+
+    public void stopAcquisitionThread(){
+        acquisitionThread.interrupt();
+    }
 
     // Thread for reading from the feed and then writing to the database.
-    public static class FeedReaderThread extends Thread{
-        private Controller controller;
+    public static class DataAcquisitonThread extends Thread{
+        private DataHandler controller;
         private long updateInterval;
 
-        public FeedReaderThread(Controller controller, long updateInterval){
+        public DataAcquisitonThread(DataHandler controller, long updateInterval){
             this.controller = controller;
             this.updateInterval = updateInterval;
 
@@ -40,7 +50,7 @@ public class Controller {
     }
 
     // pass in the locations of the database and feed.
-    public Controller(String databaseLocation, String feedLocation){
+    public DataHandler(String databaseLocation, String feedLocation){
         dbInterface = new DBInterface(databaseLocation);
         try {
             reader = new FeedReader(feedLocation);
@@ -82,7 +92,7 @@ public class Controller {
     }
 
     // get the pit stops in the database, in a json format that can be changed into a REST API.
-    public JSONArray getPitStops()
+    public String getPitStopsJSONArray()
     {
         ArrayList<PitStop> pitStops = dbInterface.getPitStops();
         JSONArray pitStopsJSONArray = new JSONArray();
@@ -95,17 +105,13 @@ public class Controller {
 
             pitStopsJSONArray.put(pitStopJSON);
         }
-        return pitStopsJSONArray;
+        return pitStopsJSONArray.toString();
     }
 
     // main thread and method, for launching the controller and the various sub threads.
-    public static void main(String[] args) throws InterruptedException {
-        Controller controller = new Controller(args[0], args[1]);
-        FeedReaderThread feedReaderThread = new FeedReaderThread(controller, 500);
-        feedReaderThread.start();
-        Thread.sleep(5000);
-
-        controller.getPitStops();
+    public static void main(String[] args){
+        DataHandler controller = new DataHandler(args[0], args[1]);
+        controller.startAcquisitionThread();
 
     }
 

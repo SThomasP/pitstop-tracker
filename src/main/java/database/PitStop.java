@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 
 // data wrapper for storing information about a pit stop

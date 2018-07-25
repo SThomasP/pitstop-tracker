@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -115,7 +115,7 @@ public class DBInterface {
     public ArrayList<PitStop> getPitStops(){
         ArrayList<PitStop> pitStops = new ArrayList<PitStop>();
         Connection connection = this.connect();
-        String getAllSQL = "SELECT * FROM pitstops";
+        String getAllSQL = "SELECT * FROM pitstops order by timeIn";
         if (connection != null){
             try{
                 Statement statement = connection.createStatement();
