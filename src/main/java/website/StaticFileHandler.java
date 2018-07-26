@@ -24,7 +24,7 @@ public class StaticFileHandler extends WebAppHandler  {
         exchange.sendResponseHeaders(200, file.length());
         OutputStream outputStream = exchange.getResponseBody();
 
-        // run the contents of the inputStream through a buffer and then send it to an OutputStream
+        // run the contents of the inputStream through a buffer and then send it to the OutputStream
         byte[] buffer = new byte[1024];
         int len = inputStream.read(buffer);
         while (len != -1){

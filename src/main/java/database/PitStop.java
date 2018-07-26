@@ -9,10 +9,10 @@ public class PitStop {
     public final double timeOut;
     public String comment;
 
-    public PitStop(int vehicleNumber, double inTime, double outTime){
+    public PitStop(int vehicleNumber, double timeIn, double timeOut){
         this.vehicleNumber = vehicleNumber;
-        this.timeIn = inTime;
-        this.timeOut = outTime;
+        this.timeIn = timeIn;
+        this.timeOut = timeOut;
         this.comment = "";
     }
 

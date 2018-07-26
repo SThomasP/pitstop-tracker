@@ -23,6 +23,9 @@
                         <th>
                             Time Out
                         </th>
+                        <th>
+                            Comment
+                        </th>
                     </tr>
                 </table>
             </div>
@@ -30,5 +33,10 @@
     </div>
 </div>
 <script src="/ajax_script.js"></script>
+<div id="commentBox" style="display: none">
+        <textarea></textarea>
+        <button onclick="cancelComment(event)" class="btn">Cancel</button>
+        <button onclick="addComment(event)" class="btn">Add</button>
+</div>
 </body>
 </html>
