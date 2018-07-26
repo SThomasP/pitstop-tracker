@@ -54,8 +54,13 @@ function addComment(event) {
     console.log(comment);
     var pitStopObject = JSON.parse(tableCell.parentElement.dataset['json']);
     pitStopObject.comment = comment;
-    console.log(pitStopObject);
     setComment(tableCell, comment);
+    var pitStopObjectString = JSON.stringify(pitStopObject);
+    tableCell.parentElement.dataset['json'] = pitStopObjectString;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/add/comment");
+    xhr.send(pitStopObjectString);
+
 
 }
 

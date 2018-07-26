@@ -42,7 +42,7 @@ function createCommentBox(event){
         text = tableCell.children[0].innerText;
     }
     tableCell.innerHTML = document.getElementById("commentBox").innerHTML;
-    tableCell.getElementsByTagName("textarea")[0].textContent = text;
+    tableCell.getElementsByTagName("textarea")[0].value = text;
 
 
 
@@ -50,17 +50,26 @@ function createCommentBox(event){
 
 function addComment(event) {
     var tableCell = event.target.parentElement;
-    var comment = tableCell.getElementsByTagName("textarea")[0].textContent;
+    var comment = tableCell.getElementsByTagName("textarea")[0].value;
     console.log(comment);
     var pitStopObject = JSON.parse(tableCell.parentElement.dataset['json']);
     pitStopObject.comment = comment;
-    console.log(pitStopObject);
-
     setComment(tableCell, comment);
+    var pitStopObjectString = JSON.stringify(pitStopObject);
+    tableCell.parentElement.dataset['json'] = pitStopObjectString;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/add/comment");
+    xhr.send(pitStopObjectString);
+
 
 }
 
 function cancelComment(event){
+    var tableCell = event.target.parentElement;
+    var pitStopObject = JSON.parse(tableCell.parentElement.dataset['json']);
+    var comment = pitStopObject.comment;
+    setComment(tableCell, comment);
+
 
 }
 

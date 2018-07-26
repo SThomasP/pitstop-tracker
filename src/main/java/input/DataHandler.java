@@ -108,6 +108,14 @@ public class DataHandler {
         return pitStopsJSONArray.toString();
     }
 
+    public synchronized void updateComment(String objectString){
+        System.out.println(objectString);
+        JSONObject object = new JSONObject(objectString);
+        PitStop pitStop = new PitStop(object.getInt("vehicle_number"), object.getDouble("time_in"), object.getDouble("time_out"));
+        pitStop.comment = object.getString("comment");
+        dbInterface.updateComment(pitStop);
+    }
+
     // main thread and method, for launching the controller and the various sub threads.
     public static void main(String[] args){
         DataHandler controller = new DataHandler(args[0], args[1]);
