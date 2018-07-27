@@ -55,7 +55,6 @@ public class DBInterface {
                     statement.setDouble(3, pitStop.timeOut);
                     statement.setString(4, pitStop.comment);
                     statement.executeUpdate();
-
                     connection.close();
 
                 } catch (SQLException e) {

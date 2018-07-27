@@ -4,6 +4,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 // class for obtaining the initial JSON file and converting it to something usable.
@@ -21,8 +22,9 @@ public class FeedReader {
     // read the json from the feed, wrap in an object and then return it.
     public synchronized JSONObject getJsonObject(){
         try {
-            jsonObject = new JSONObject( new JSONTokener(webAddress.openStream()));
-
+            InputStream inputStream = webAddress.openStream();
+            jsonObject = new JSONObject( new JSONTokener(inputStream));
+            inputStream.close();
 
         }
         catch (IOException e){

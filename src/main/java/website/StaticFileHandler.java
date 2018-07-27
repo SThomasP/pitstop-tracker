@@ -20,6 +20,7 @@ public class StaticFileHandler extends WebAppHandler  {
     public void handle(HttpExchange exchange) throws IOException {
         setHeader("Content-Type", mimeType, exchange);
         System.out.println("Serving "+ file);
+        // write the content of the resource (a static file)to a buffer
         InputStream inputStream = getClass().getResourceAsStream(file);
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
         byte[] data = new byte[4096];
@@ -31,12 +32,10 @@ public class StaticFileHandler extends WebAppHandler  {
         inputStream.close();
         data = byteBuffer.toByteArray();
         byteBuffer.close();
+        //send the contents of the buffer to the output stream.
         exchange.sendResponseHeaders(200, data.length);
         OutputStream outputStream = exchange.getResponseBody();
         outputStream.write(data);
-        // run the contents of the inputStream through a buffer and then send it to the OutputStream
         outputStream.close();
-
-
     }
 }

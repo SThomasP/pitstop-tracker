@@ -13,17 +13,20 @@ public class WebApp {
     private DataHandler dataHandler;
     private int port;
 
+    // start the server and the handler's acquisition thread.
     public void start(){
         dataHandler.startAcquisitionThread();
         server.start();
         System.out.println("Server Running on Port "+ port);
     }
 
+    // stop the server, not currently used.
     public void stop(){
         dataHandler.stopAcquisitionThread();
         server.stop(0);
     }
 
+    // set the up the server, with it's various handlers
     public WebApp(DataHandler dataHandler, int port) throws IOException {
         this.dataHandler = dataHandler;
         this.port = port;

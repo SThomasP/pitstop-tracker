@@ -111,10 +111,14 @@ public class DataHandler {
         return pitStopsJSONArray.toString();
     }
 
+    // add a comment to the database, from a string json object
     public synchronized void updateComment(String objectString) {
+        // convert the string to an object.
         JSONObject object = new JSONObject(objectString);
+        // convert the object to a pit stop object
         PitStop pitStop = new PitStop(object.getInt("vehicle_number"), object.getDouble("time_in"), object.getDouble("time_out"));
         pitStop.comment = object.getString("comment");
+        // add it to the database.
         dbInterface.updateComment(pitStop);
     }
 
