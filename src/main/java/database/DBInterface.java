@@ -33,6 +33,7 @@ public class DBInterface {
                 // and then create a new one
                 statement.execute("create table pitstops (vehicleNumber integer, timeIn real, timeOut real not null,comment text, PRIMARY KEY (vehicleNumber, timeIn));");
                 connection.close();
+                System.out.println("Database rebuilt");
             }
             catch (SQLException e){
                 e.printStackTrace();

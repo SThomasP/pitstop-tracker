@@ -26,7 +26,7 @@ public class FeedReader {
 
         }
         catch (IOException e){
-            e.printStackTrace();
+            System.out.println("Failed to get feed"+ e.getMessage());
         }
         return jsonObject;
     }

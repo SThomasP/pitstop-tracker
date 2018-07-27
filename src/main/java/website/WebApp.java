@@ -11,24 +11,45 @@ public class WebApp {
 
     private HttpServer server;
     private DataHandler dataHandler;
+    private int port;
 
-
-    public WebApp(DataHandler dataHandler) throws IOException {
-        this.dataHandler = dataHandler;
+    public void start(){
         dataHandler.startAcquisitionThread();
-        server = HttpServer.create(new InetSocketAddress(8080), 0);
-        server.createContext("/api", new ApiHandler(dataHandler));
-        server.createContext("/add/comment", new CommentHandler(dataHandler));
-        server.createContext("/", new StaticFileHandler("src/main/resources/index.html", "text/html"));
-        server.createContext("/ajax_script.js", new StaticFileHandler("src/main/resources/script.js", "application/javascript"));
-        server.setExecutor(null);
         server.start();
+        System.out.println("Server Running on Port "+ port);
     }
 
+    public void stop(){
+        dataHandler.stopAcquisitionThread();
+        server.stop(0);
+    }
 
-    public static void main(String[] args) throws IOException {
-        DataHandler dataHandler = new DataHandler("pitstops.db", "http://localhost:9000/api/livefeed");
-        WebApp webApp = new WebApp(dataHandler);
+    public WebApp(DataHandler dataHandler, int port) throws IOException {
+        this.dataHandler = dataHandler;
+        this.port = port;
+        server = HttpServer.create(new InetSocketAddress(port), 0);
+        server.createContext("/api", new ApiHandler(dataHandler));
+        server.createContext("/add/comment", new CommentHandler(dataHandler));
+        server.createContext("/", new StaticFileHandler("/index.html", "text/html"));
+        server.createContext("/ajax_script.js", new StaticFileHandler("/script.js", "application/javascript"));
+        server.setExecutor(null);
+    }
+
+    public static void main(String[] args){
+        try {
+            DataHandler handler;
+            try {
+                handler = new DataHandler(args[0], args[1]);
+            }
+            catch (ArrayIndexOutOfBoundsException e){
+                handler = new DataHandler("pitstops.db", "http://localhost:9000/api/livefeed");
+            }
+            WebApp app = new WebApp(handler, 8080);
+            app.start();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
 
     }
 }
