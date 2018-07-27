@@ -34,7 +34,7 @@ public class WebApp {
         server.createContext("/api", new ApiHandler(dataHandler));
         server.createContext("/add/comment", new CommentHandler(dataHandler));
         server.createContext("/", new StaticFileHandler("/index.html", "text/html"));
-        server.createContext("/ajax_script.js", new StaticFileHandler("/script.js", "application/javascript"));
+        server.createContext("/ajax_script.js", new StaticFileHandler("/min_script.js", "application/javascript"));
         server.setExecutor(null);
     }
 
