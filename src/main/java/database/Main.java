@@ -19,8 +19,8 @@ public class Main {
         }
         catch (ArrayIndexOutOfBoundsException e){
             System.out.println("Please run the jar file with two arguments");
-            System.out.println("The First should be the (desired) location of the database.");
-            System.out.println("The Second should be the location of the feed");
+            System.out.println("The First should be the (desired) location of the database, eg: pitstops.db");
+            System.out.println("The Second should be the location of the live feed eg. http://localhost:9000/api/livefeed");
         }
 
     }
