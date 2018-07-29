@@ -7,15 +7,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-// main class and a controller for connecting all the parts.
+// Data Handler and interface for the feed reader.
 public class FeedDataHandler {
 
     private DBInterface dbInterface;
     private FeedReader reader;
     private Thread acquisitionThread;
 
+    // Secondary thread for regular polling of the data feed
     public static class DataAcquisitionThread extends Thread {
         private FeedDataHandler controller;
         private long updateInterval;

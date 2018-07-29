@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+// Data handler for functions needed by the site.
 public class SiteDataHandler {
 
     private DBInterface dbInterface;
