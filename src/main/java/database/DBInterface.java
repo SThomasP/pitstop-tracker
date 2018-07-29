@@ -21,19 +21,21 @@ public class DBInterface {
     }
 
     // add the prefixes to the filepath, and then connect to the database and reset the tables.
-    public DBInterface(String filePath){
+    public DBInterface(String filePath, boolean rebuild){
         dbPath = "jdbc:sqlite:" + filePath;
 
         Connection connection = this.connect();
         if (connection != null) {
             try {
+                if (rebuild){
                 Statement statement = connection.createStatement();
                 // drop the old table
                 statement.execute("drop table if exists pitstops;");
                 // and then create a new one
                 statement.execute("create table pitstops (vehicleNumber integer, timeIn real, timeOut real not null,comment text, PRIMARY KEY (vehicleNumber, timeIn));");
-                connection.close();
                 System.out.println("Database rebuilt");
+                }
+                connection.close();
             }
             catch (SQLException e){
                 e.printStackTrace();
@@ -135,7 +137,7 @@ public class DBInterface {
 
     // Testing the database read write code.
     public static void main(String[] args){
-        DBInterface dbInterface = new DBInterface("pitstops.db");
+        DBInterface dbInterface = new DBInterface("pitstops.db", true);
         PitStop ps1 = new PitStop(33, 134.33, 0);
         dbInterface.addPitStop(ps1);
 

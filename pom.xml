@@ -14,7 +14,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>website.WebApp</mainClass>
+                            <mainClass>database.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

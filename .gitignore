@@ -85,3 +85,4 @@ fabric.properties
 
 pitstops.db
 PitStopTracker.jar
+target/

@@ -1,7 +1,7 @@
 package website;
 
 import com.sun.net.httpserver.HttpExchange;
-import input.DataHandler;
+import input.FeedDataHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,10 +10,10 @@ import java.io.InputStreamReader;
 
 // Handler for dealing with comments, pass them to the data handler, which in turn passes it to the database interface.
 public class CommentHandler extends WebAppHandler {
-    private DataHandler dataHandler;
+    private SiteDataHandler siteDataHandler;
 
-    public CommentHandler(DataHandler dataHandler){
-        this.dataHandler = dataHandler;
+    public CommentHandler(SiteDataHandler siteDataHandler){
+        this.siteDataHandler = siteDataHandler;
     }
 
     public void handle(HttpExchange exchange) throws IOException {
@@ -32,7 +32,7 @@ public class CommentHandler extends WebAppHandler {
             }
             System.out.println(pitStopJSONString);
             //and then pass it to the data handler
-            dataHandler.updateComment(pitStopJSONString);
+            siteDataHandler.updateComment(pitStopJSONString);
 
             //and then respond with a short message of acceptance.
             respond("True", exchange);
